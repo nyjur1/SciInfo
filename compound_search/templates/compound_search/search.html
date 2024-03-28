@@ -1,0 +1,159 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+  <div class="vstack gap-4 mt-3">
+    <div class="nav-bar">
+      <div class="help">
+        <a href="/" rel="noopener noreferrer">
+          <i class="bi bi-house-door-fill"></i>
+          Home
+        </a>
+      </div>
+      <div class="help">
+        <a href="/glossary/" rel="noopener noreferrer">
+          <i class="bi bi-info-circle-fill"></i>
+          Glossary
+        </a>
+      </div>
+      <div class="help">
+        <a href="/forum/" rel="noopener noreferrer">
+          <i class="bi bi-person-raised-hand"></i>
+          Help Forum
+        </a>
+      </div>
+    </div>
+    <div class="title-container">
+      <img src="https://github.com/joey-cheng-codes/htgs-team3/blob/edens-branch/Schrodinger_SciINfo.png?raw=true"
+           alt="logo"
+           width="375"
+           height="200">
+      <!-- <h1 class="text-primary">Schrodinger SciBoard</h1> -->
+    </div>
+    <!-- Search bar -->
+    <form action="{% url 'search-compounds' %}" method="get">
+      <div class="input-group">
+        <input type="text"
+               name="query"
+               id="compound-search-field"
+               class="form-control"
+               placeholder="Search existing compounds"
+               value="{{ smiles_query }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+    <!-- <div class="info-para-container ">
+    <a href="/glossary/" rel="noopener noreferrer"><i class="bi bi-info-circle-fill"></i>
+    View glossary for key terms.</a> <!-- ADD GLOSSARY -->
+<!-- </div> -->
+<!-- Add Compounds -->
+<!-- Error handling if bad search -->
+<div class="error">
+{% if error_message %}
+<b>
+<p style="color: red;">{{ error_message }}</p>
+</b>
+{% endif %}
+</div>
+<!-- Search results -->
+{% if result_length > 0 %}
+<div class="result-length">
+<p>{{ result_length }} results</p>
+</div>
+<div class="compound-card-grid">
+{% for smiles, prop in smiles_list %}
+<div class="compound-card-container">
+{% include 'compound_image/partials/compound-image-card.html' with smiles=smiles properties=prop highlighted_substructure=smiles_query %}
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p class="fs-3">No matching compounds</p>
+{% endif %}
+</div>
+{% endblock %}
+{% block styles %}
+<style>
+  .form-control {
+    background-color: #fbfbfb !important;
+  }
+
+  .text-primary {
+    text-align: center;
+    font-size: 4rem;
+  }
+
+  .compound-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 5rem;
+    justify-items: center;
+  }
+
+  .compound-card-container {
+    width: 18rem;
+  }
+
+  .title-container {
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+
+  }
+
+  .info-para-container {
+    margin-top: -20px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    color: white;
+  }
+
+  .info-para-container a:hover {
+    color: rgb(132, 196, 255);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .help {
+    flex-direction: row;
+    margin-top: 1%;
+    text-align: right;
+    margin-bottom: -20px;
+    color: white
+  }
+
+  .help a:hover {
+    color: rgb(132, 196, 255);
+  }
+  .nav-bar {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    gap: 3rem;
+    margin-left: auto;
+  }
+
+
+  .fs-3 {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+  }
+
+  .result-length {
+    text-align: right;
+    color: white;
+    font-size: 20px;
+  }
+
+  .error {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: -25px;
+  }
+</style>
+{% endblock %}
